@@ -1,0 +1,88 @@
+/*
+	Example: A tip calculation FIS (fuzzy inference system)
+	Calculates tip based on 'servie' and 'food'
+
+	If you want to about this example (and fuzzy logic), please 
+	read Matlab's tutorial on fuzzy logic toolbox 
+	http://www.mathworks.com/access/helpdesk/help/pdf_doc/fuzzy/fuzzy.pdf
+
+									Pablo Cingolani 
+									pcingola@users.sourceforge.net
+*/
+
+FUNCTION_BLOCK tipper	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	weight : REAL;
+	dirty_level : REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	water_level : REAL;
+        time : REAL;
+END_VAR
+
+FUZZIFY weight			
+	TERM light := (0, 1) (2, 1) (4, 0) ; 
+	TERM medium := (2.5, 0) (4, 1) (6, 1) (7.5, 0);
+	TERM heavy := (6, 0) (8, 1) (10, 1);
+END_FUZZIFY
+
+FUZZIFY dirty_level		
+	TERM low := (0,1) (1.75,1) (3.5,0) ;
+	TERM medium := trian 3.5 5.25 7;
+        TERM high := (7,0) (8.5, 1) (10, 1);
+END_FUZZIFY
+
+DEFUZZIFY water_level			
+	TERM low := (0, 1) (2, 1) (4, 0);
+	TERM medium := (2.5, 0) (4, 1) (6, 1) (7.5, 0);
+	TERM high := (6,0) (8.5,1) (10,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+DEFUZZIFY time			
+        TERM short := (0, 0) (2, 1) (4, 0);
+	TERM medium := (2.5, 0) (4, 1) (6, 1) (7.5, 0);
+	TERM long := (6,0) (8.5,1) (10,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'max' accumulation method
+
+	RULE 1 : IF weight IS light AND dirty_level IS low 
+                 THEN water_level IS low ,
+                 time IS short;
+	RULE 2 : IF weight IS light AND dirty_level IS medium 
+                 THEN water_level IS low ,
+                 time IS medium;
+        RULE 3 : IF weight IS light AND dirty_level IS high
+                 THEN water_level IS low ,
+                 time IS long;
+        RULE 4 : IF weight IS medium AND dirty_level IS low 
+                 THEN water_level IS medium ,
+                 time IS short;
+        RULE 5 : IF weight IS medium AND dirty_level IS medium 
+                 THEN water_level IS medium ,
+                 time IS medium;
+        RULE 6 : IF weight IS medium AND dirty_level IS high 
+                 THEN water_level IS medium ,
+                 time IS long;
+        RULE 7 : IF weight IS heavy AND dirty_level IS low 
+                 THEN water_level IS high ,
+                 time IS short;
+        RULE 8 : IF weight IS heavy AND dirty_level IS medium 
+                 THEN water_level IS high ,
+                 time IS medium;
+        RULE 9 : IF weight IS heavy AND dirty_level IS high 
+                 THEN water_level IS high ,
+                 time IS long;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
