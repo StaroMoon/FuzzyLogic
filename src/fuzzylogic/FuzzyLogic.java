@@ -34,7 +34,7 @@ public class FuzzyLogic {
         JFuzzyChart.get().chart(functionBlock);
 
         // Set inputs
-        functionBlock.setVariable("weight", 10);
+        functionBlock.setVariable("weight", 8);
         functionBlock.setVariable("dirty_level", 10);
         //functionBlock.setVariable("weight", Double.parseDouble(t1.getText()));
         //functionBlock.setVariable("dirty_level", Double.parseDouble(t2.getText()));
@@ -50,7 +50,7 @@ public class FuzzyLogic {
         JFuzzyChart.get().chart(time, time.getDefuzzifier(), true);
 
         // Print ruleSet
-        System.out.println(fis);
+        System.out.println(functionBlock);
     }
     
     public static void setValue(JTextField tf,String type){

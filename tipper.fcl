@@ -43,9 +43,9 @@ DEFUZZIFY water_level
 END_DEFUZZIFY
 
 DEFUZZIFY time			
-        TERM short := (0, 0) (2, 1) (4, 0);
-	TERM medium := (2.5, 0) (4, 1) (6, 1) (7.5, 0);
-	TERM long := (6,0) (8.5,1) (10,1);
+        TERM short := (0, 0) (7, 1) (12, 0);
+	TERM medium := (10, 0) (16, 1) (22, 0);
+	TERM long := (20,0) (25,1) (30,1);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
 	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
 END_DEFUZZIFY
