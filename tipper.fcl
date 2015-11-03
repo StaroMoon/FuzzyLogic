@@ -1,15 +1,3 @@
-/*
-	Example: A tip calculation FIS (fuzzy inference system)
-	Calculates tip based on 'servie' and 'food'
-
-	If you want to about this example (and fuzzy logic), please 
-	read Matlab's tutorial on fuzzy logic toolbox 
-	http://www.mathworks.com/access/helpdesk/help/pdf_doc/fuzzy/fuzzy.pdf
-
-									Pablo Cingolani 
-									pcingola@users.sourceforge.net
-*/
-
 FUNCTION_BLOCK tipper	// Block definition (there may be more than one block per file)
 
 VAR_INPUT				// Define input variables
@@ -29,9 +17,9 @@ FUZZIFY weight
 END_FUZZIFY
 
 FUZZIFY dirty_level		
-	TERM low := (0,1) (1.75,1) (3.5,0) ;
-	TERM medium := trian 3.5 5.25 7;
-        TERM high := (7,0) (8.5, 1) (10, 1);
+	TERM low := (0,1) (2,1) (4,0) ;
+	TERM medium := trian 3 5 7;
+        TERM high := (6,0) (8.5, 1) (10, 1);
 END_FUZZIFY
 
 DEFUZZIFY water_level			
